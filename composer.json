@@ -1,0 +1,19 @@
+{
+  "name": "seferov/request-to-entity-bundle",
+  "description": "Converts request parameters into doctrine entities",
+  "type": "symfony-bundle",
+  "require": {
+    "php": "~5.5|~7.0",
+    "symfony/framework-bundle": "^2.3|^3.0"
+  },
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Farhad Safarov",
+      "email": "farhad.safarov@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": { "Seferov\\Bundle\\RequestToEntityBundle\\": "" }
+  }
+}
