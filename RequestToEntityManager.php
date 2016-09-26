@@ -2,8 +2,10 @@
 
 namespace Seferov\Bundle\RequestToEntityBundle;
 
+use Seferov\Bundle\RequestToEntityBundle\Annotation\RequestOptions;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PropertyAccess\PropertyAccess;
+use Doctrine\Common\Annotations\Reader;
 
 /**
  * Class RequestToEntityManager
@@ -17,9 +19,15 @@ class RequestToEntityManager
      */
     private $request;
 
-    public function __construct(Request $request)
+    /**
+     * @var Reader
+     */
+    private $reader;
+
+    public function __construct(Request $request, Reader $reader)
     {
         $this->request = $request;
+        $this->reader = $reader;
     }
 
     /**
@@ -30,9 +38,19 @@ class RequestToEntityManager
     {
         $accessor = PropertyAccess::createPropertyAccessor();
 
-        foreach ($this->request->request->all() as $name => $value) {
-            if ($accessor->isWritable($object, $name)) {
-                $accessor->setValue($object, $name, $value);
+        $rf = new \ReflectionObject($object);
+        foreach ($rf->getProperties() as $prop) {
+            /** @var RequestOptions $requestOptions */
+            $requestOptions = $this->reader->getPropertyAnnotation($prop, RequestOptions::class);
+
+            if ($requestOptions && $requestOptions->readOnly) {
+                continue;
+            }
+
+            $value = $this->request->get($prop->getName());
+
+            if ($value && $accessor->isWritable($object, $prop->getName())) {
+                $accessor->setValue($object, $prop->getName(), $value);
             }
         }
 

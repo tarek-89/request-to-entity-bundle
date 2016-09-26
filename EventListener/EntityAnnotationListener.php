@@ -48,7 +48,7 @@ class EntityAnnotationListener
 
         // Create object and set attributes from request
         $object = new $class;
-        $manager = new RequestToEntityManager($request);
+        $manager = new RequestToEntityManager($request, $this->reader);
         $manager->handle($object);
 
         $request->attributes->set(lcfirst((new \ReflectionClass($object))->getShortName()), $object);
