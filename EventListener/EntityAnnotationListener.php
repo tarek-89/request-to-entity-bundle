@@ -4,8 +4,8 @@ namespace Seferov\Bundle\RequestToEntityBundle\EventListener;
 
 use Doctrine\Common\Annotations\Reader;
 use Seferov\Bundle\RequestToEntityBundle\Annotation\Entity;
+use Seferov\Bundle\RequestToEntityBundle\RequestToEntityManager;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
-use Symfony\Component\PropertyAccess\PropertyAccess;
 
 /**
  * Class EntityAnnotationListener
@@ -46,15 +46,10 @@ class EntityAnnotationListener
             throw new \Exception(sprintf('No class as %s', $class));
         }
 
-        $accessor = PropertyAccess::createPropertyAccessor();
-
         // Create object and set attributes from request
         $object = new $class;
-        foreach ($request->request->all() as $name => $value) {
-            if ($accessor->isWritable($object, $name)) {
-                $accessor->setValue($object, $name, $value);
-            }
-        }
+        $manager = new RequestToEntityManager($request);
+        $manager->handle($object);
 
         $request->attributes->set(lcfirst((new \ReflectionClass($object))->getShortName()), $object);
     }
