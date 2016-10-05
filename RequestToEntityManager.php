@@ -49,7 +49,7 @@ class RequestToEntityManager
 
             $value = $this->request->get($prop->getName());
 
-            if ($value && $accessor->isWritable($object, $prop->getName())) {
+            if ($value !== null && $accessor->isWritable($object, $prop->getName())) {
                 $accessor->setValue($object, $prop->getName(), $value);
             }
         }
