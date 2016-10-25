@@ -16,4 +16,6 @@ class RequestOptions
      * @var bool
      */
     public $readOnly = false;
+
+    public $transformer;
 }

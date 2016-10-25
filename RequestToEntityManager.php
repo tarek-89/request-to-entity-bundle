@@ -49,6 +49,10 @@ class RequestToEntityManager
 
             $value = $this->request->get($prop->getName());
 
+            if ($requestOptions && is_callable($requestOptions->transformer)) {
+                $value = call_user_func($requestOptions->transformer, $value);
+            }
+
             if ($value !== null && $accessor->isWritable($object, $prop->getName())) {
                 $accessor->setValue($object, $prop->getName(), $value);
             }
