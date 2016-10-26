@@ -1,7 +1,7 @@
 services:
     seferov_request_to_entity.annotation_listener:
         class: Seferov\Bundle\RequestToEntityBundle\EventListener\EntityAnnotationListener
-        arguments: ['@annotation_reader']
+        arguments: ['@annotation_reader', '@request_stack']
         tags:
             - { name: kernel.event_listener, event: kernel.controller, method: onKernelController, priority: 0 }
 
