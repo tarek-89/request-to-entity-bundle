@@ -7,5 +7,4 @@ services:
 
     seferov_request_to_entity.manager:
         class: Seferov\Bundle\RequestToEntityBundle\RequestToEntityManager
-        scope: request
-        arguments: ['@request', '@annotation_reader']
+        arguments: ['@request_stack', '@annotation_reader']

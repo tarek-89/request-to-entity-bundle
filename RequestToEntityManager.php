@@ -4,6 +4,7 @@ namespace Seferov\Bundle\RequestToEntityBundle;
 
 use Seferov\Bundle\RequestToEntityBundle\Annotation\RequestOptions;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Doctrine\Common\Annotations\Reader;
 
@@ -24,9 +25,9 @@ class RequestToEntityManager
      */
     private $reader;
 
-    public function __construct(Request $request, Reader $reader)
+    public function __construct(RequestStack $requestStack, Reader $reader)
     {
-        $this->request = $request;
+        $this->request = $requestStack->getCurrentRequest();
         $this->reader = $reader;
     }
 
@@ -49,7 +50,7 @@ class RequestToEntityManager
 
             $value = $this->request->get($prop->getName());
 
-            if ($requestOptions && is_callable($requestOptions->transformer)) {
+            if ($value && $requestOptions && is_callable($requestOptions->transformer)) {
                 $value = call_user_func($requestOptions->transformer, $value);
             }
 
