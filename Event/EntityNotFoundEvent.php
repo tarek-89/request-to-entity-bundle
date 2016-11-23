@@ -11,6 +11,7 @@ class EntityNotFoundEvent extends Event
 {
     const NAME = 'request_to_entity.entity_not_found';
 
+    
     /**
      * @var string
      */
